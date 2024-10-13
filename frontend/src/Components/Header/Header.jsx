@@ -4,9 +4,10 @@ import {
   Typography,
   IconButton,
   Collapse,
-} from "@material-tailwind/react"; // Fixed the import statement
+} from "@material-tailwind/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import logo from 'D:\\VIT22-26\\TY\\edai\\EDAI\\EDAIFINAL\\frontend\\src\\assets\\logo.webp'; // Adjust the path as needed
+import { Link } from "react-router-dom"; // Import Link from React Router
+import logo from "../logo.webp";
 
 function NavbarWithSolidBackground() {
   const [openNav, setOpenNav] = React.useState(false);
@@ -21,71 +22,82 @@ function NavbarWithSolidBackground() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const navItems = [
+    "Home",
+    "TreeCount",
+    "Location",
+    "Path",
+    "About"
+  ];
+
   const navList = (
-    <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-      {["Home","TreeCount", "Location", "Path", "About"].map((item) => (
+    <ul className="mb-4 mt-2 flex flex-col gap-4 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-8">
+      {navItems.map((item) => (
         <Typography
           key={item}
           as="li"
           variant="small"
-          color="white" // Changed color to white for better visibility
-          className="p-1 font-normal"
+          color="white"
+          className="p-1 font-semibold text-lg"
         >
-          <a
-            href={`/${item.toLowerCase()}`}
-            className="flex items-center px-4 py-2 bg-transparent border border-white rounded-md transition-all hover:bg-red-600 hover:text-white" // Updated hover styles
+          <Link
+            to={`/${item.toLowerCase()}`} // Use Link for internal routing
+            className="flex items-center px-4 py-2 bg-transparent border border-white rounded-md transition-all duration-300 ease-in-out hover:bg-white hover:text-[#205A28] hover:shadow-lg"
           >
             {item}
-          </a>
+          </Link>
         </Typography>
       ))}
+      {/* Button to open MapPage in a new tab */}
+      <Typography as="li" variant="small" color="white">
+        <button
+          onClick={() => window.open('/mappage', '_blank')} // Opens MapPage in a new tab
+          className="flex items-center px-4 py-3 font-bold bg-transparent border border-white rounded-md transition-all duration-300 ease-in-out hover:bg-white hover:text-[#205A28] hover:shadow-lg"
+        >
+          Open Map
+        </button>
+      </Typography>
     </ul>
   );
 
   return (
     <div className="relative overflow-hidden">
-      {/* Navbar with solid background color */}
-      <Navbar
-        className="sticky top-0 z-10 h-max max-w-full bg-[#205A28] px-4 py-2 lg:px-8 lg:py-4" // Green background
-      >
+      <Navbar className="sticky top-0 z-10 h-max max-w-full bg-[#205A28] px-4 py-3 lg:px-8 lg:py-4 shadow-md transition-shadow duration-500">
         <div className="flex items-center justify-between w-full">
-          {/* Logo or Brand Name */}
-          <a href="/" className="flex items-center">
+          <Link to="/" className="flex items-center">
             <img
               src={logo}
               alt="Brand Logo"
-              className="h-12 w-12 rounded-full mr-3 " // Adjusted size and added rounded-full
+              className="h-12 w-12 rounded-full mr-3 transform transition-transform hover:scale-105 duration-300"
             />
             <Typography
               as="span"
-              variant="h6"
-              color="white" // Brand name color
-              className="font-bold"
+              variant="h5"
+              color="white"
+              className="font-extrabold tracking-wide"
             >
               AutoForest
             </Typography>
-          </a>
+          </Link>
 
-          {/* Desktop Nav */}
           <div className="hidden lg:flex justify-center w-full">{navList}</div>
 
-          {/* Mobile Nav Toggle */}
           <IconButton
             variant="text"
-            className="lg:hidden"
+            className="lg:hidden text-white hover:bg-white hover:text-[#205A28] rounded-full transition-all duration-300"
             onClick={() => setOpenNav(!openNav)}
+            aria-label="Toggle Navigation" // Add aria-label for accessibility
           >
             {openNav ? (
-              <XMarkIcon className="h-6 w-6 text-white" strokeWidth={2} /> // Set icon color to white
+              <XMarkIcon className="h-6 w-6" strokeWidth={2} />
             ) : (
-              <Bars3Icon className="h-6 w-6 text-white" strokeWidth={2} /> // Set icon color to white
+              <Bars3Icon className="h-6 w-6" strokeWidth={2} />
             )}
           </IconButton>
         </div>
 
-        {/* Mobile Nav - Collapsible */}
         <Collapse open={openNav}>
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center space-y-2 pb-4">
             {navList}
           </div>
         </Collapse>

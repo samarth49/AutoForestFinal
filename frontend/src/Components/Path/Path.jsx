@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './Path.css'; // Add your styling here
+import { Loader } from 'lucide-react';
 
 const Path = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -11,7 +11,7 @@ const Path = () => {
   const [imagePath, setImagePath] = useState(null);
   const [coordinates, setCoordinates] = useState(null);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);  // For shimmer or spinner effect
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
@@ -20,7 +20,7 @@ const Path = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    setLoading(true);  // Start loading
+    setLoading(true);
 
     const formData = new FormData();
     formData.append('file', selectedFile);
@@ -41,41 +41,114 @@ const Path = () => {
       console.error("Error processing the file!", error);
       setError(error.response?.data?.error || "An error occurred.");
     } finally {
-      setLoading(false);  // Stop loading
+      setLoading(false);
     }
   };
 
   return (
-    <div className="path-container">
-      <h1>Optimal Path Calculation</h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-200 to-gray-100 flex flex-col items-center justify-center px-4 py-8">
+      <h1 className="text-4xl font-extrabold text-gray-800 mb-10 drop-shadow-md text-center">
+        Optimal Path Calculation
+      </h1>
 
-      {/* Form for uploading the image and inputting coordinates */}
-      <form onSubmit={handleSubmit} className="upload-form">
-        <input type="file" onChange={handleFileChange} className="file-input" />
-        <div className="input-group">
-          <label>Start X:</label>
-          <input type="number" value={startX} onChange={(e) => setStartX(e.target.value)} required />
+      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-xl w-full max-w-xl flex flex-col items-center space-y-6">
+        
+        {/* Custom styled file input and button */}
+        <div className="relative w-full">
+          <label className="block text-gray-700 font-medium mb-2">Upload File:</label>
+          <div className="flex items-center justify-between p-3 border border-gray-300 rounded-lg bg-white shadow-sm hover:shadow-md focus-within:ring-2 focus-within:ring-green-400">
+            <input 
+              type="file" 
+              onChange={handleFileChange} 
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            />
+            <span className="text-gray-600">Choose a file</span>
+            <button className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-600 transition-colors">
+              Browse
+            </button>
+          </div>
         </div>
-        <div className="input-group">
-          <label>Start Y:</label>
-          <input type="number" value={startY} onChange={(e) => setStartY(e.target.value)} required />
+
+        {/* Coordinate input fields */}
+        <div className="grid grid-cols-2 gap-6 w-full">
+          <div className="flex flex-col">
+            <label htmlFor="startX" className="text-gray-700 font-medium">Start X:</label>
+            <input 
+              type="number" 
+              value={startX} 
+              onChange={(e) => setStartX(e.target.value)} 
+              required 
+              className="mt-2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-transparent outline-none shadow-sm"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="startY" className="text-gray-700 font-medium">Start Y:</label>
+            <input 
+              type="number" 
+              value={startY} 
+              onChange={(e) => setStartY(e.target.value)} 
+              required 
+              className="mt-2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-transparent outline-none shadow-sm"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="endX" className="text-gray-700 font-medium">End X:</label>
+            <input 
+              type="number" 
+              value={endX} 
+              onChange={(e) => setEndX(e.target.value)} 
+              required 
+              className="mt-2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-transparent outline-none shadow-sm"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="endY" className="text-gray-700 font-medium">End Y:</label>
+            <input 
+              type="number" 
+              value={endY} 
+              onChange={(e) => setEndY(e.target.value)} 
+              required 
+              className="mt-2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-transparent outline-none shadow-sm"
+            />
+          </div>
         </div>
-        <div className="input-group">
-          <label>End X:</label>
-          <input type="number" value={endX} onChange={(e) => setEndX(e.target.value)} required />
-        </div>
-        <div className="input-group">
-          <label>End Y:</label>
-          <input type="number" value={endY} onChange={(e) => setEndY(e.target.value)} required />
-        </div>
-        <button type="submit" className="submit-button">Upload and Calculate Path</button>
+
+        <button 
+          type="submit" 
+          className="w-full py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors flex items-center justify-center space-x-2 shadow-lg"
+        >
+          <span>Upload and Calculate Path</span>
+        </button>
       </form>
 
-      {/* Display error message */}
-      {error && <div className="error-message">{error}</div>}
+      {error && (
+        <div className="mt-6 text-red-600 font-semibold bg-red-100 p-4 rounded-lg border-l-4 border-red-500 w-full max-w-xl">
+          {error}
+        </div>
+      )}
 
-      {/* Display shimmer effect or spinner while loading */}
-      {loading && <div className="shimmer">Calculating...</div>}
+      {loading && (
+        <div className="mt-6 flex items-center space-x-4 text-lg text-green-600 font-semibold">
+          <Loader className="w-8 h-8 animate-spin" />
+          <span>Calculating...</span>
+        </div>
+      )}
+
+      {imagePath && (
+        <div className="mt-12 flex flex-col items-center w-full max-w-4xl">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Processed Path</h2>
+          <img 
+            src={`http://localhost:5000/static/${imagePath}`} 
+            alt="Processed Path" 
+            className="rounded-lg shadow-lg w-full h-auto max-w-full mb-4 transition-transform transform hover:scale-105"
+          />
+          {coordinates && (
+            <pre className="text-gray-700 bg-gray-100 p-4 rounded-lg w-full max-w-full shadow-lg overflow-auto">
+              {JSON.stringify(coordinates, null, 2)}
+            </pre>
+          )}
+        </div>
+      )}
     </div>
   );
 };

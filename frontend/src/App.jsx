@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Import Router components
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'; // Import Router components
 import './App.css';
 import About from './Components/About/About';
 import NavbarWithSolidBackground from './Components/Header/Header.jsx';
@@ -6,23 +7,34 @@ import Home from './Components/Home/Home'; // Import other components as needed
 import TreeCrown from './Components/TreeCount/TreeCrown.jsx';
 import Path from './Components/Path/Path.jsx';
 import Location from './Components/Location/Location.jsx';
+import MapPage from './MapPage';  
 
-function App() {
+const App = () => {
+  const location = useLocation(); // Get the current location
+
+  // Only show the Navbar if not on the MapPage
+  const showNavbar = location.pathname !== '/mappage';
+
   return (
-    <Router>
-      <div>
-        <NavbarWithSolidBackground />
-        <Routes>
-          <Route path="/" element={<Home />} />  {/* Home Route */}
-          <Route path="/home" element={<Home />} />
-           <Route path="/treecount" element={<TreeCrown />} />
-           <Route path="/location" element={<Location />} />
-           <Route path="/path" element={<Path />} />
-          <Route path="/about" element={<About />} />  {/* About Route */}
-        </Routes>
-      </div>
-    </Router>
+    <div>
+      {showNavbar && <NavbarWithSolidBackground />}
+      <Routes>
+        <Route path="/" element={<Home />} />  {/* Home Route */}
+        <Route path="/home" element={<Home />} />
+        <Route path="/treecount" element={<TreeCrown />} />
+        <Route path="/location" element={<Location />} />
+        <Route path="/path" element={<Path />} />
+        <Route path="/about" element={<About />} />  {/* About Route */}
+        <Route path="/mappage" element={<MapPage />} />  {/* New Route for MapPage */}
+      </Routes>
+    </div>
   );
-}
+};
 
-export default App;
+const AppWrapper = () => (
+  <Router>
+    <App />
+  </Router>
+);
+
+export default AppWrapper;
