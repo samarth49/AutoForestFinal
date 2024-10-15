@@ -8,11 +8,12 @@ import TreeCrown from './Components/TreeCount/TreeCrown.jsx';
 import Path from './Components/Path/Path.jsx';
 import Location from './Components/Location/Location.jsx';
 import MapPage from './MapPage';  
+import Footer from './Components/Footer/Footer.jsx';
 
 const App = () => {
-  const location = useLocation(); // Get the current location
+  const location = useLocation(); 
 
-  // Only show the Navbar if not on the MapPage
+
   const showNavbar = location.pathname !== '/mappage';
 
   return (
@@ -27,6 +28,7 @@ const App = () => {
         <Route path="/about" element={<About />} />  {/* About Route */}
         <Route path="/mappage" element={<MapPage />} />  {/* New Route for MapPage */}
       </Routes>
+      <Footer />
     </div>
   );
 };
