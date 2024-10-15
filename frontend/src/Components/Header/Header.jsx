@@ -25,7 +25,6 @@ function NavbarWithSolidBackground() {
   const navItems = [
     "Home",
     "TreeCount",
-    "Location",
     "Path",
     "About"
   ];

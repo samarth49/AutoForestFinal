@@ -1,7 +1,7 @@
 import os
 import multiprocessing
 # from flask_bootstrap import Bootstrap4
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect,jsonify
 from treecount import process_image
 from optimalpath import ImageSeg, OptimalPathing
 # from tile import get_data, predict_tile
@@ -112,6 +112,49 @@ def index():
     g = geocoder.ip('me')
     print(g.latlng)
     return render_template('Location.html', weather_data=weather_data, error=error)
+
+
+# @app.route('/mappage', methods=['POST'])
+# def receive_points():
+#     try:
+#         # Ensure you are receiving JSON data
+#         data = request.get_json()  # Using get_json() for receiving JSON data
+
+#         # Log the received data to the console
+#         print("Received wavepoints data:", data)
+
+#         # Perform any processing or save the data as needed
+
+#         return jsonify({"status": "success", "received_data": data})
+#     except Exception as e:
+#         print("Error receiving wavepoints:", str(e))
+#         return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/set-waypoint', methods=['POST'])
+def set_waypoint():
+    try:
+        # Get the JSON data from the request
+        data = request.get_json()
+
+        # Extract the waypoints array
+        waypoints = data.get('waypoints', [])
+
+        if not waypoints:
+            return jsonify({'message': 'No waypoints received.'}), 400
+
+        # Print the waypoints (or save them to a file/database)
+        for idx, waypoint in enumerate(waypoints, 1):
+            print(f"Waypoint {idx}: ({waypoint['lat']}, {waypoint['lng']})")
+
+        # Return success response
+        return jsonify({'message': 'Waypoints received successfully.', 'waypoints': waypoints}), 200
+
+    except Exception as e:
+        # In case of any error, return an error response
+        print(f"Error: {e}")
+        return jsonify({'message': 'An error occurred', 'error': str(e)}), 500
+
+
 
 
 
