@@ -19,19 +19,35 @@ const TreeCrown = () => {
     e.preventDefault();
     setError(null);
     setLoading(true);
-
+  
     if (!selectedFile) {
       setError("Please select a file first.");
       setLoading(false);
       return;
     }
-
-    // Simulating API call
-    setTimeout(() => {
-      setImagePath('placeholder.jpg');
-      setTreeCount(42);
+  
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+  
+    try {
+      const response = await fetch("http://127.0.0.1:5000/treecount", {
+        method: "POST",
+        body: formData,
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        setImagePath(data.image_path);  // Backend returns processed image path
+        setTreeCount(data.count);       // Backend returns tree count
+      } else {
+        setError(data.error || "Something went wrong");
+      }
+    } catch (error) {
+      setError("Failed to upload and process the image.");
+    } finally {
       setLoading(false);
-    }, 2000);
+    }
   };
 
   const resetState = () => {
@@ -113,7 +129,7 @@ const TreeCrown = () => {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }} className="mt-12 w-full max-w-3xl bg-white p-8 rounded-lg shadow-lg">
             <Typography variant="h4" className="text-green-800 font-bold mb-6">Processed Result</Typography>
             <img
-              src={`/api/placeholder/600/400`}
+              src={`http://127.0.0.1:5000/static/${imagePath}`}
               alt="Processed Trees"
               className="w-full h-auto rounded-lg shadow-lg mb-6 transition-transform transform hover:scale-105"
             />

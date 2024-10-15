@@ -8,9 +8,8 @@ import TreeCrown from './Components/TreeCount/TreeCrown.jsx';
 import Path from './Components/Path/Path.jsx';
 
 // import Location from './Components/Location/Location.jsx';
-import MapPage from './Components/MapPage.jsx';  
+import MapPage from './Components/MapComponent.jsx';  
 import Location from './Components/Location/Location.jsx';
-import MapPage from './MapPage';  
 import Footer from './Components/Footer/Footer.jsx';
 
 

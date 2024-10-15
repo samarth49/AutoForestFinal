@@ -133,22 +133,6 @@ const Path = () => {
           <span>Calculating...</span>
         </div>
       )}
-
-      {imagePath && (
-        <div className="mt-12 flex flex-col items-center w-full max-w-4xl">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Processed Path</h2>
-          <img 
-            src={`http://localhost:5000/static/${imagePath}`} 
-            alt="Processed Path" 
-            className="rounded-lg shadow-lg w-full h-auto max-w-full mb-4 transition-transform transform hover:scale-105"
-          />
-          {coordinates && (
-            <pre className="text-gray-700 bg-gray-100 p-4 rounded-lg w-full max-w-full shadow-lg overflow-auto">
-              {JSON.stringify(coordinates, null, 2)}
-            </pre>
-          )}
-        </div>
-      )}
     </div>
   );
 };
